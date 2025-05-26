@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>😂 Fun Joke Generator</title>
+  
+  <!-- Import Google Fonts (Poppins) for better typography -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    /* Reset box-sizing to include padding and border in element's total width and height */
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Body styling - centered content with gradient background */
+    body {
+      font-family: 'Poppins', sans-serif; /* Set font */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient background */
+      height: 100vh; /* Full viewport height */
+      margin: 0; /* Remove default margin */
+      display: flex; /* Use flexbox for centering */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      padding: 20px; /* Padding around content */
+      color: #fff; /* White text */
+      text-align: center; /* Centered text */
+    }
+
+    /* Container for the joke card */
+    #joke-container {
+      background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+      backdrop-filter: blur(12px); /* Glassmorphism blur effect */
+      border-radius: 20px; /* Rounded corners */
+      padding: 40px 50px; /* Padding inside the container */
+      max-width: 600px; /* Max width to keep it narrow */
+      width: 100%; /* Responsive width */
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+      transition: transform 0.3s ease; /* Smooth transform on hover */
+      cursor: default; /* Default cursor */
+      user-select: none; /* Disable text selection */
+    }
+
+    /* Hover effect to slightly lift the container */
+    #joke-container:hover {
+      transform: translateY(-10px); /* Move up */
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+    }
+
+    /* Styling for the joke setup text */
+    #setup {
+      font-size: 1.8rem; /* Large font size */
+      font-weight: 700; /* Bold text */
+      margin-bottom: 25px; /* Space below */
+      min-height: 70px; /* Reserve space to avoid layout shift */
+    }
+
+    /* Styling for the punchline text */
+    #punchline {
+      font-size: 1.4rem; /* Slightly smaller */
+      font-weight: 400; /* Normal weight */
+      color: #ffeb3b; /* Yellow color for punchline */
+      margin-bottom: 40px; /* Space below */
+      min-height: 50px; /* Reserve space to avoid layout shift */
+    }
+
+    /* Style the button */
+    button {
+      background: #ffeb3b; /* Yellow background */
+      border: none; /* No border */
+      color: #333; /* Dark text */
+      font-weight: 700; /* Bold */
+      font-size: 1.3rem; /* Button font size */
+      padding: 15px 40px; /* Padding inside button */
+      border-radius: 50px; /* Rounded pill shape */
+      cursor: pointer; /* Pointer cursor on hover */
+      box-shadow: 0 5px 15px rgba(255, 235, 59, 0.4); /* Subtle shadow */
+      transition: background 0.3s ease, transform 0.2s ease; /* Smooth hover animations */
+      user-select: none; /* Prevent text selection */
+    }
+
+    /* Hover effect for button */
+    button:hover {
+      background: #fdd835; /* Slightly darker yellow */
+      transform: scale(1.05); /* Slight scale up */
+      box-shadow: 0 8px 20px rgba(253, 216, 53, 0.6); /* Stronger shadow */
+    }
+
+    /* Click (active) effect for button */
+    button:active {
+      transform: scale(0.95); /* Slight scale down */
+    }
+
+    /* Responsive styles for smaller screens */
+    @media (max-width: 600px) {
+      #joke-container {
+        padding: 30px 25px; /* Smaller padding */
+      }
+
+      #setup {
+        font-size: 1.4rem; /* Smaller font */
+      }
+
+      #punchline {
+        font-size: 1.1rem; /* Smaller font */
+      }
+
+      button {
+        font-size: 1.1rem; /* Smaller button font */
+        padding: 12px 30px; /* Smaller padding */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Joke container: holds setup, punchline, and button -->
+  <div id="joke-container" role="region" aria-live="polite">
+    <!-- Setup text will be dynamically updated here -->
+    <div id="setup">Click the button to get a hilarious joke!</div>
+    <!-- Punchline text will be dynamically updated here -->
+    <div id="punchline"></div>
+    <!-- Button triggers fetchJoke function on click -->
+    <button aria-label="Get a new joke" onclick="fetchJoke()">Get Joke 😂</button>
+  </div>
+
+  <script>
+    /**
+     * Fetch a random joke from the public API and display it.
+     */
+    function fetchJoke() {
+      // Get references to setup and punchline elements
+      const setupEl = document.getElementById('setup');
+      const punchlineEl = document.getElementById('punchline');
+      
+      // Show loading message
+      setupEl.innerText = 'Loading joke...';
+      punchlineEl.innerText = '';
+
+      // Fetch random joke from official-joke-api
+      fetch('https://official-joke-api.appspot.com/random_joke')
+        .then(response => response.json())  // Parse JSON response
+        .then(joke => {
+          // Display joke setup and punchline
+          setupEl.innerText = joke.setup;
+          punchlineEl.innerText = joke.punchline;
+        })
+        .catch(error => {
+          // On error, show a friendly message and log error to console
+          setupEl.innerText = "Oops! Couldn't fetch a joke.";
+          punchlineEl.innerText = '';
+          console.error('Error fetching joke:', error);
+        });
+    }
+  </script>
+
+</body>
+</html>
