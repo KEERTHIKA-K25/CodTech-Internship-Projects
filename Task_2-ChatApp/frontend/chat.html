@@ -5,89 +5,98 @@
   <title>💬 Chat App</title>
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
       margin: 0;
       padding: 0;
       display: flex;
       height: 100vh;
       justify-content: center;
       align-items: center;
-      color: #fff;
+      color: #333;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
       padding: 30px;
-      border-radius: 20px;
-      width: 400px;
+      border-radius: 16px;
+      width: 420px;
       max-width: 90%;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     }
 
     h2 {
       text-align: center;
       margin-bottom: 20px;
-      color: #fff;
+      color: #2c3e50;
     }
 
     #chat-box {
-      background: #ffffff22;
+      background: #f8f9fa;
       border-radius: 10px;
       padding: 15px;
       height: 300px;
       overflow-y: auto;
       margin-bottom: 20px;
+      border: 1px solid #e0e0e0;
     }
 
     .message {
-      background: #fff;
-      color: #333;
+      background: #ecf0f1;
+      color: #2c3e50;
       padding: 10px 15px;
-      border-radius: 20px;
+      border-radius: 18px;
       margin: 10px 0;
       max-width: 75%;
       word-wrap: break-word;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     }
 
     .message.self {
-      background: #ffeb3b;
+      background: #ffe0b2;
       align-self: flex-end;
       margin-left: auto;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      margin: 10px 0;
-      font-size: 16px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 8px 0;
+      font-size: 15px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #00bfa5;
+      box-shadow: 0 0 5px rgba(0, 191, 165, 0.4);
     }
 
     button {
       width: 100%;
-      background: #ffeb3b;
-      color: #333;
+      background: #00bfa5;
+      color: #fff;
       font-weight: 600;
       border: none;
       padding: 12px;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
       transition: all 0.3s ease;
     }
 
     button:hover {
-      background: #fdd835;
+      background: #00997a;
       transform: scale(1.03);
     }
 
@@ -117,7 +126,6 @@
       stompClient = Stomp.over(socket);
       stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-
         stompClient.subscribe('/topic/messages', function (messageOutput) {
           const msg = JSON.parse(messageOutput.body);
           showMessage(msg.sender, msg.content);
@@ -135,7 +143,6 @@
       if (!sender || !message) return;
 
       senderName = sender;
-
       stompClient.send("/app/message", {}, JSON.stringify({ sender, content: message }));
       messageInput.value = '';
     }
